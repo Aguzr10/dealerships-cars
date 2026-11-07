@@ -16,7 +16,7 @@ export class Car {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column ({length: 100, unique: true})
+    @Column ({length: 10, unique: true})
     plate: string;
 
     @Column({length: 50})
@@ -34,7 +34,8 @@ export class Car {
     @Column({type: "varchar", length: 20, default: CarStatus.AVAILABLE})
     status: CarStatus;
 
-
+    @Column({name: 'dealership_id'})
+    dealershipId: number;
 
 
 
