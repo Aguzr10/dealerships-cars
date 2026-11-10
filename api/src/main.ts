@@ -21,8 +21,8 @@ async function bootstrap() {
       'API REST con NestJS para la gestión de concesionarios y autos',
     )
     .setVersion('1.0')
-    .addTag('characters')
-    .addTag('teams')
+    .addTag('cars')
+    .addTag('dealerships')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
