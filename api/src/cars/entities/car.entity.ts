@@ -6,6 +6,7 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     JoinColumn,
+    type Relation,
 } from 'typeorm';
 import { Dealership } from '../../dealerships/entities/dealership.entity.js';
 import { CarStatus } from './car-status.enums.js';
@@ -53,7 +54,8 @@ export class Car {
     // @JoinColumn dice qué columna guarda la FK (la misma dealership_id de arriba).
     @ManyToOne(() => Dealership, (dealership) => dealership.cars)
     @JoinColumn({name: 'dealership_id'})
-    dealership: Dealership;
+    // Relation<> evita el error "Cannot access before initialization" (imports circulares en ES modules)
+    dealership: Relation<Dealership>;
 
 
 

@@ -1,6 +1,7 @@
 # Notas de repaso: Taller 4 (Concesionarios)
 
 Para consultar en el parcial. El taller está **completo**: dealerships, cars y pruebas unitarias (`npm test` pasa 14/14).
+**Probado contra la base real** (Docker): los 10 endpoints y las 6 reglas dan el código esperado (200/201/400/404/409).
 Es la mejor referencia para **pruebas con mocks** (Vitest) y para **regla de padre activo al crear un hijo**.
 
 Rutas relativas a esta carpeta (`dealerships-cars/`). El código está en `api/src/`.
@@ -30,10 +31,13 @@ Si sale el error `edgesOut` de npm, se arregla con `--legacy-peer-deps`.
 
 | Qué | Dónde | Línea |
 |---|---|---|
-| `@OneToMany(() => Car, (car) => car.dealership)` en el lado "uno"; **no crea columna** | `api/src/dealerships/entities/dealership.entity.ts` | 36 |
-| `@ManyToOne(() => Dealership, (d) => d.cars)` en el lado "muchos", que **tiene la FK** | `api/src/cars/entities/car.entity.ts` | 54 |
-| `@JoinColumn({ name: 'dealership_id' })`: qué columna guarda la FK | `api/src/cars/entities/car.entity.ts` | 55 |
-| `@Column({ name: 'dealership_id' }) dealershipId: number`: la FK como número, para filtrar y crear | `api/src/cars/entities/car.entity.ts` | 39 |
+| `@OneToMany(() => Car, (car) => car.dealership)` en el lado "uno"; **no crea columna** | `api/src/dealerships/entities/dealership.entity.ts` | 37 |
+| `@ManyToOne(() => Dealership, (d) => d.cars)` en el lado "muchos", que **tiene la FK** | `api/src/cars/entities/car.entity.ts` | 55 |
+| `@JoinColumn({ name: 'dealership_id' })`: qué columna guarda la FK | `api/src/cars/entities/car.entity.ts` | 56 |
+| `@Column({ name: 'dealership_id' }) dealershipId: number`: la FK como número, para filtrar y crear | `api/src/cars/entities/car.entity.ts` | 40 |
+| **`Relation<...>`** en el tipo de las dos propiedades de relación (`cars: Relation<Car[]>`, `dealership: Relation<Dealership>`) | ambas entidades | 39 y 58 |
+
+> ⚠️ **Obligatorio en este proyecto** (`"type": "module"`): sin `Relation<>` (importado como `type Relation` desde `typeorm`), la app **compila pero no arranca**: `ReferenceError: Cannot access 'Dealership' before initialization`. Pasa porque cada entidad importa la otra (import circular) y el decorador intenta leer la clase antes de que exista. En el Taller 3 (CommonJS) no hace falta.
 | `forFeature([Dealership, Car])`: los dos repos en el módulo padre | `api/src/dealerships/dealerships.module.ts` | 12 |
 | `forFeature([Car, Dealership])`: los dos repos en el módulo hijo | `api/src/cars/cars.module.ts` | 12 |
 
@@ -188,6 +192,10 @@ this.carRepo.create({ ...campos, status: dto.status ?? CarStatus.AVAILABLE, deal
 | `has no exported member 'XsService'` | nombre de la clase distinto al que generó Nest |
 | `Property 'update' does not exist` | el controlador generado llama a un método que se borró del servicio |
 | Imports sin `.js` | en este proyecto (`"type": "module"`) los imports locales terminan en `.js` |
+| `Cannot access 'X' before initialization` al arrancar (compila bien) | import circular entre entidades → tipar las relaciones con `Relation<X>` |
+| `ENOENT ... dist/...js` al arrancar | otro `start:dev` está recompilando `dist` al mismo tiempo → cerrar uno |
+| `npm test` falla con "Nest can't resolve dependencies ... Repository" | falta el mock: `{ provide: getRepositoryToken(X), useValue: mock }` |
+| `git push` falla con `SSL certificate ... unable to get local issuer` | `git -c http.sslBackend=schannel push origin main` |
 
 ---
 

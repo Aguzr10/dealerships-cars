@@ -5,6 +5,7 @@ import {
     OneToMany,
     CreateDateColumn,
     UpdateDateColumn,
+    type Relation,
 } from 'typeorm';
 import { Car } from '../../cars/entities/car.entity.js'; 
 
@@ -34,7 +35,8 @@ export class Dealership {
     // Lado "uno" de la relación (1 concesionario → N carros). NO crea columna; permite dealership.cars.
     // Su pareja es @ManyToOne en car.entity.ts (car.dealership).
     @OneToMany(() => Car, (car) => car.dealership)
-    cars: Car[];
+    // Relation<> evita el error "Cannot access before initialization" (imports circulares en ES modules)
+    cars: Relation<Car[]>;
 
 }
 
