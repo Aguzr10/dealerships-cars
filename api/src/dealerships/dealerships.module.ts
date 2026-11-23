@@ -8,6 +8,7 @@ import { Car } from '../cars/entities/car.entity.js';
 @Module({
   controllers: [DealershipsController],
   providers: [DealershipsService],
+  // forFeature = qué repositorios se pueden inyectar en este módulo. Car está para listar/contar los carros.
   imports: [TypeOrmModule.forFeature([Dealership, Car])],
 })
 export class DealershipsModule {}

@@ -31,9 +31,11 @@ export class Car {
     @Column()
     price: number;
 
+    // En la BD es VARCHAR + CHECK (no un ENUM de Postgres) → type: 'varchar'. default = si no se envía.
     @Column({type: "varchar", length: 20, default: CarStatus.AVAILABLE})
     status: CarStatus;
 
+    // La FK como número: sirve para filtrar (?dealershipId=) y crear sin cargar el objeto padre.
     @Column({name: 'dealership_id'})
     dealershipId: number;
 
@@ -47,6 +49,8 @@ export class Car {
     @UpdateDateColumn({name : 'updated_at'})
     updatedAt: Date;
 
+    // Lado "muchos" (N carros → 1 concesionario). Este lado tiene la FK.
+    // @JoinColumn dice qué columna guarda la FK (la misma dealership_id de arriba).
     @ManyToOne(() => Dealership, (dealership) => dealership.cars)
     @JoinColumn({name: 'dealership_id'})
     dealership: Dealership;

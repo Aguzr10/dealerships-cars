@@ -8,7 +8,8 @@ describe('CarsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CarsController],
-      providers: [CarsService],
+      // El servicio real necesita repositorios; para probar solo el controlador basta un objeto vacío.
+      providers: [{ provide: CarsService, useValue: {} }],
     }).compile();
 
     controller = module.get<CarsController>(CarsController);

@@ -8,6 +8,7 @@ import { Dealership } from '../dealerships/entities/dealership.entity.js';
 @Module({
   controllers: [CarsController],
   providers: [CarsService],
+  // Dealership también: CarsService lo necesitará para la regla 4 (concesionario existe y está activo).
   imports: [TypeOrmModule.forFeature([Car, Dealership])],
 })
 export class CarsModule {}
